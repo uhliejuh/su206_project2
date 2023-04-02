@@ -119,7 +119,18 @@ def check_policy_numbers(data):
     """
  
 
-    pass
+
+    answer = []
+    for item in data:
+        if item[3]  == "Exempt" or item[3] == "Pending":
+            continue
+        else:
+            if(re.search('20\d{2}-00\d{4}STR', item[3]) or re.search('STR-000\d{4}', item[3])):
+                continue
+            else:
+                answer.append(item[2])
+                
+    return answer
                 
 
 
