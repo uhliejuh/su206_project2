@@ -3,8 +3,8 @@ import re
 import os
 import csv
 import unittest
-
-
+#who am I: ELijah Cantu
+#who did you work with: Syeda Reza, 
 # IMPORTANT NOTE:
 """
 If you are getting "encoding errors" while trying to open, read, or write from a file, 
@@ -20,29 +20,11 @@ There are a few special characters present from Airbnb that aren't defined in st
 This is beyond the scope of what you have learned so far in this class, 
 so we have provided this for you just in case it happens to you. Good luck!
 """
-
+#syeda
 def get_listings_from_search_results(html_file):
-    """
-    Write a function that creates a BeautifulSoup object on html_file. Parse
-    through the object and return a list of tuples containing:
-     a string of the title of the listing,
-     an int of the number of reviews of the listing,
-     and a string of the listing id number
-    in the format given below. Make sure to turn the number of reviews into ints.
-
-    The listing id is found in the url of a listing. For example, for
-        https://www.airbnb.com/rooms/1944564
-    the listing id is 1944564.
-.
-
-    [
-        ('Title of Listing 1', 'Number of Reviews 1', 'Listing ID 1'),  # format
-        ('Loft in Mission District', 422, '1944564'),  # example
-    ]
-    """
     pass
 
-
+#syeda
 def get_listing_information(listing_id):
     """
     Write a function to return relevant information in a tuple from an Airbnb listing id.
@@ -68,8 +50,9 @@ def get_listing_information(listing_id):
     )
     """
     pass
+    
 
-
+#eljiah
 def get_detailed_listing_database(html_file):
     """
     Write a function that calls the above two functions in order to return
@@ -85,8 +68,9 @@ def get_detailed_listing_database(html_file):
     ]
     """
     pass
+        
 
-
+#elijah
 def write_csv(data, filename):
     """
     Write a function that takes in a list of tuples (called data, i.e. the
@@ -110,8 +94,10 @@ def write_csv(data, filename):
     This function should not return anything.
     """
     pass
+    
+    
 
-
+#syeda
 def check_policy_numbers(data):
     """
     Write a function that takes in a list of tuples called data, (i.e. the one that is returned by
@@ -131,7 +117,11 @@ def check_policy_numbers(data):
     ]
 
     """
+ 
+
     pass
+                
+
 
 
 def google_scholar_searcher(query):
@@ -155,7 +145,7 @@ def google_scholar_searcher(query):
 
     # YOUR ANSWER HERE
 
-
+#syeda and elijah
 class TestCases(unittest.TestCase):
 
     def test_get_listings_from_search_results(self):
@@ -167,11 +157,13 @@ class TestCases(unittest.TestCase):
         # check that the variable you saved after calling the function is a list
         self.assertEqual(type(listings), list)
         # check that each item in the list is a tuple
-
+        for item in listings:
+            self.assertEqual(type(item), type(tuple()))
         # check that the first title, number of reviews, and listing id tuple is correct (open the search results html and find it)
+        self.assertEqual(listings[0], ('Loft in Mission District', 422, '1944564'))
 
         # check that the last title is correct (open the search results html and find it)
-        pass
+        self.assertEqual(listings[17][0],  "Guest suite in Mission District")
 
     def test_get_listing_information(self):
         html_list = ["467507",
@@ -194,10 +186,14 @@ class TestCases(unittest.TestCase):
             # check that the third element in the tuple is an int
             self.assertEqual(type(listing_information[2]), int)
         # check that the first listing in the html_list has the correct policy number
+        self.assertEqual(listing_informations[0][0], 'STR-0005349')
+        
 
         # check that the last listing in the html_list has the correct place type
+        self.assertEqual(listing_informations[2][1], 'Entire Room')
 
         # check that the third listing has the correct cost
+        self.assertEqual(listing_informations[-2][2], 127)
 
         pass
 
@@ -211,12 +207,15 @@ class TestCases(unittest.TestCase):
             # assert each item in the list of listings is a tuple
             self.assertEqual(type(item), tuple)
             # check that each tuple has a length of 6
+            self.assertEqual(len(item), 6)
 
         # check that the first tuple is made up of the following:
         # 'Loft in Mission District', 422, '1944564', '2022-004088STR', 'Entire Room', 181
+        self.assertEqual(detailed_database[0], ('Loft in Mission District', 422, '1944564', '2022-004088STR', 'Entire Room', 181))
 
         # check that the last tuple is made up of the following:
         # 'Guest suite in Mission District', 324, '467507', 'STR-0005349', 'Entire Room', 165
+        self.assertEqual(detailed_database[-1], ('Guest suite in Mission District', 324, '467507', 'STR-0005349', 'Entire Room', 165))
 
         pass
 
@@ -235,10 +234,13 @@ class TestCases(unittest.TestCase):
         # check that there are 19 lines in the csv
         self.assertEqual(len(csv_lines), 19)
         # check that the header row is correct
+        self.assertEqual(csv_lines[0], ['Listing Title','Number of Reviews','Listing ID','Policy Number','Place Type','Nightly Rate'])
 
         # check that the next row is Private room in Mission District,198,23672181,STR-0002892,Private Room,109
-
-        # check that the last row is Guest suite in Mission District,70,50010586,STR-0004717,Entire Room,310
+        self.assertEqual(csv_lines[1], ['Private room in Mission District','198','23672181','STR-0002892','Private Room','109'])
+    
+        # check that the last row is Guest suite in Mission District,70,50010586,STR-0004717,Private Room,310
+        self.assertEqual(csv_lines[-1], ['Guest suite in Mission District','70','50010586','STR-0004717','Private Room','310'])
 
         pass
 
@@ -251,10 +253,12 @@ class TestCases(unittest.TestCase):
         # check that the return value is a list
         self.assertEqual(type(invalid_listings), list)
         # check that there is exactly one element in the string
-
+        self.assertEqual(len(invalid_listings), 1)
         # check that the element in the list is a string
+        self.assertEqual(type(invalid_listings[0]), str)
 
         # check that the first element in the list is '16204265'
+        self.assertEqual(invalid_listings[0],'16204265' )
         pass
 
 
