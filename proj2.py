@@ -22,7 +22,31 @@ so we have provided this for you just in case it happens to you. Good luck!
 """
 #syeda
 def get_listings_from_search_results(html_file):
-    pass
+    with open(html_file, "r") as filee:
+        soup = BeautifulSoup(filee, 'html.parser')
+        
+    result = []
+    
+    titles = soup.find_all("div", class_="t1jojoys dir dir-ltr")
+    reviews = soup.find_all("span", class_="r1dxllyb dir dir-ltr")
+
+    for rev in range(len(titles)):
+        z = str(reviews[rev].text)
+        if z == "New":
+            review = 0
+        else:
+            extraRev = z.split()
+            review = extraRev[1]
+            review = review.strip('(')
+            review = review.strip(')')
+            review = int(review)
+        listing = titles[rev].get("id", None).strip("title_")
+
+        tup = (titles[rev].text, review, listing)
+        result.append(tup)
+
+    return result
+    #name, number of reviews, listing id
 
 #syeda
 def get_listing_information(listing_id):
@@ -49,7 +73,33 @@ def get_listing_information(listing_id):
         nightly rate
     )
     """
-    pass
+    filename = "html_files/listing_" + listing_id + ".html"
+    with open(filename, "r") as filee:
+        soup = BeautifulSoup(filee, 'html.parser')
+    result = []
+    
+    policy = soup.find("li", class_="f19phm7j dir dir-ltr").find('span', class_ = "ll4r2nl dir dir-ltr").text
+    if(policy.upper() == "PENDING"):
+        policy = "Pending"
+    elif(re.search("\d{6,7}",policy)):
+         policy = policy
+    else:
+        policy = "Exempt"
+        
+    placetype = soup.find("h2", class_= "_14i3z6h").text
+    if re.search("Entire", placetype):
+        placetype = "Entire Room"
+    elif re.search("Shared", placetype):
+        placetype = "Shared Room"
+    else:
+        placetype = "Private Room"
+        
+    per_night = soup.find("span", class_ = "_tyxjp1").text
+    list_nights = per_night.split('&')
+    per_night = int(list_nights[0].strip('$'))
+    answer = (policy, placetype, per_night)
+    
+    return answer
     
 
 #eljiah
@@ -67,7 +117,14 @@ def get_detailed_listing_database(html_file):
         ...
     ]
     """
-    pass
+    answer = []
+    list_of_tuples = get_listings_from_search_results(html_file)
+    for listing in list_of_tuples:
+        listing_id = listing[2]
+        lsi = get_listing_information(listing_id)
+        listing_new_tuple = (listing[0], listing[1], listing[2],lsi[0], lsi[1], lsi[2])
+        answer.append(listing_new_tuple)
+    return answer
         
 
 #elijah
@@ -93,7 +150,18 @@ def write_csv(data, filename):
 
     This function should not return anything.
     """
-    pass
+    data = sorted(data, key=lambda x:x[5])
+    file = open(filename, "w")
+    file.write('Listing Title,Number of Reviews,Listing ID,Policy Number,Place Type,Nightly Rate' + '\n')
+    for atuple in data:
+        row = ""
+        for index in range(len(atuple)):
+            if(atuple[index] == atuple[5]):
+                row = row + str(atuple[index]) + '\n'
+            else:
+                row = row + str(atuple[index]) + ","
+        file.write(row)
+    file.close()
     
     
 
